@@ -137,7 +137,7 @@
   <div class="stat"><div class="stat-value">22</div><div class="stat-label">Pessoas</div></div>
   <div class="stat"><div class="stat-value">8</div><div class="stat-label">Setores</div></div>
   <div class="stat"><div class="stat-value">4</div><div class="stat-label">Socios</div></div>
-  <div class="stat"><div class="stat-value">3</div><div class="stat-label">Vagas Abertas</div></div>
+  <div class="stat"><div class="stat-value">2</div><div class="stat-label">Vagas Abertas</div></div>
   <div class="stat"><div class="stat-value">3</div><div class="stat-label">Unidades</div></div>
 </div>
 
@@ -273,14 +273,14 @@
     <div class="section-header">
       <div class="section-dot"></div>
       <div class="section-title">Laboratorio</div>
-      <div class="section-meta">1 ativo + 2 vagas | Reporta a: Dr. Rodolfo</div>
+      <div class="section-meta">2 ativos + 1 vaga | Lider: Sarah &rarr; Dr. Rodolfo</div>
     </div>
     <div class="section-desc">
       <strong>Objetivo:</strong> Producao interna de proteses e pecas com CAD/CAM. Setor em montagem — prioridade de contratacao para reduzir dependencia de labs externos e melhorar margem.
     </div>
     <div class="section-grid">
-      <div class="member-card" onclick="openModal('pedro')"><div class="name">Pedro</div><div class="role">Assistente de Protese</div><div class="reports-to">Reporta a: Dr. Rodolfo</div><span class="status status-ativo">Ativo</span><div class="click-hint">Clique para ver KPIs</div></div>
-      <div class="member-card"><div class="name">Lider Lab CAD/CAM</div><div class="role">Gestao do lab, producao digital</div><div class="reports-to">Reportara a: Dr. Rodolfo</div><span class="status status-vaga">A contratar</span></div>
+      <div class="member-card" onclick="openModal('pedro')"><div class="name">Pedro</div><div class="role">Assistente de Protese</div><div class="reports-to">Reporta a: Sarah</div><span class="status status-ativo">Ativo</span><div class="click-hint">Clique para ver KPIs</div></div>
+      <div class="member-card" onclick="openModal('sarah_lab')"><div class="name">Sarah</div><div class="role">Lider Lab CAD/CAM</div><div class="reports-to">Reporta a: Dr. Rodolfo</div><span class="status status-lider">Lider</span><div class="click-hint">Clique para ver KPIs</div></div>
       <div class="member-card"><div class="name">Protesista</div><div class="role">Producao de proteses</div><div class="reports-to">Reportara a: Lider Lab</div><span class="status status-vaga">A contratar</span></div>
     </div>
   </div>
@@ -326,7 +326,6 @@
   <div class="vagas-panel">
     <h3>Vagas Abertas</h3>
     <div class="vagas-list">
-      <div class="vaga-item"><div class="vaga-dot"></div><span><strong>Lider Lab CAD/CAM</strong> — Laboratorio</span></div>
       <div class="vaga-item"><div class="vaga-dot"></div><span><strong>Protesista</strong> — Laboratorio</span></div>
       <div class="vaga-item"><div class="vaga-dot"></div><span><strong>Concierge</strong> — Recepcao</span></div>
     </div>
@@ -478,9 +477,16 @@ const people = {
     responsabilidades: ["Gerenciar fluxo de caixa das 3 unidades", "Elaborar e analisar relatorios financeiros (DRE, balanco)", "Controlar custos fixos e variaveis", "Definir estrategia de precificacao", "Negociar com fornecedores e parceiros", "Supervisionar Natali nos lancamentos do Omie", "Aprovar pagamentos e investimentos", "Monitorar inadimplencia e cobrancas", "Acompanhar break-even e margem operacional", "Gestao de contratos e renegociacoes"],
     kpis: [{label: "Fluxo de caixa", value: "Gerencia direto"}, {label: "Break-even", value: "Prioridade #1"}, {label: "Margem operacional", value: "Meta 15%"}, {label: "Custo fixo mensal", value: "Monitorar"}]
   },
+  sarah_lab: {
+    name: "Sarah", role: "Lider Lab CAD/CAM", sector: "Laboratorio", sectorColor: "#e53e3e",
+    reporta: "Dr. Rodolfo (CEO)",
+    descricao: "Alem de atuar como Closer no comercial e supervisionar a recepcao, Sarah lidera o laboratorio CAD/CAM. Coordena a producao de pecas proteticas, gerencia o Pedro (assistente) e garante qualidade e prazos das entregas do lab.",
+    responsabilidades: ["Coordenar operacao do laboratorio CAD/CAM", "Gerenciar equipe do lab (Pedro)", "Controlar qualidade das pecas produzidas", "Definir prioridades e prazos de producao", "Interface entre clinico e laboratorio", "Controlar estoque e insumos do lab"],
+    kpis: [{label: "Pecas entregues/sem", value: "Conforme agenda"}, {label: "Prazo entrega", value: "Dentro SLA"}, {label: "Retrabalho", value: "Meta zero"}, {label: "Estoque lab", value: "Sem ruptura"}]
+  },
   pedro: {
     name: "Pedro", role: "Assistente de Protese", sector: "Laboratorio", sectorColor: "#e53e3e",
-    reporta: "Dr. Rodolfo (CEO)",
+    reporta: "Sarah (Lider Lab)",
     descricao: "Assistente de protese responsavel por apoiar a producao de pecas proteticas. Auxilia nos processos de laboratorio, preparacao de materiais e acabamento de proteses dentarias.",
     responsabilidades: ["Apoiar producao de proteses dentarias", "Preparar materiais para confeccao de pecas", "Auxiliar no acabamento e polimento", "Organizar laboratorio e insumos", "Controlar estoque de materiais de lab", "Apoiar processos de CAD/CAM quando implementado"],
     kpis: [{label: "Pecas produzidas/sem", value: "Conforme demanda"}, {label: "Qualidade", value: "Zero retrabalho"}, {label: "Estoque lab", value: "Sem falta"}, {label: "Prazo entrega", value: "Dentro do SLA"}]
