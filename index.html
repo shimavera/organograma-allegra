@@ -1,0 +1,540 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Organograma — Allegra Odontologia</title>
+<style>
+  :root {
+    --navy: #1a365d;
+    --blue: #2b6cb0;
+    --purple: #6b46c1;
+    --gold: #d69e2e;
+    --green: #38a169;
+    --red: #e53e3e;
+    --gray: #718096;
+    --dark: #2d3748;
+    --light: #f7fafc;
+    --shadow: 0 4px 14px rgba(0,0,0,0.08);
+    --radius: 12px;
+  }
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif; background: var(--light); color: var(--dark); }
+
+  header { background: var(--navy); color: white; padding: 32px 40px; text-align: center; }
+  header h1 { font-size: 28px; font-weight: 700; }
+  header p { font-size: 14px; opacity: 0.7; margin-top: 6px; }
+
+  .stats-bar { display: flex; justify-content: center; gap: 40px; padding: 20px; background: white; border-bottom: 1px solid #e2e8f0; flex-wrap: wrap; }
+  .stat { text-align: center; }
+  .stat-value { font-size: 28px; font-weight: 700; color: var(--navy); }
+  .stat-label { font-size: 12px; color: var(--gray); text-transform: uppercase; letter-spacing: 1px; }
+
+  .org-container { max-width: 1200px; margin: 0 auto; padding: 40px 20px; }
+
+  /* Diretoria */
+  .diretoria { display: flex; justify-content: center; gap: 16px; flex-wrap: wrap; margin-bottom: 40px; }
+  .card { background: white; border-radius: var(--radius); padding: 20px 24px; box-shadow: var(--shadow); text-align: center; min-width: 180px; transition: transform 0.2s, box-shadow 0.2s; cursor: pointer; border-top: 4px solid transparent; }
+  .card:hover { transform: translateY(-4px); box-shadow: 0 8px 24px rgba(0,0,0,0.12); }
+  .card .name { font-size: 16px; font-weight: 700; margin-bottom: 4px; }
+  .card .role { font-size: 13px; color: var(--gray); }
+  .card .badge { display: inline-block; font-size: 10px; font-weight: 600; text-transform: uppercase; padding: 3px 8px; border-radius: 20px; margin-top: 8px; color: white; }
+  .card .click-hint { font-size: 10px; color: #a0aec0; margin-top: 6px; }
+  .card.ceo { border-top-color: var(--navy); } .card.ceo .badge { background: var(--navy); }
+  .card.coo { border-top-color: #3182ce; } .card.coo .badge { background: #3182ce; }
+  .card.socia-closer { border-top-color: var(--gold); } .card.socia-closer .badge { background: var(--gold); }
+  .card.socia-rh { border-top-color: var(--gray); } .card.socia-rh .badge { background: var(--gray); }
+
+  .connector { text-align: center; margin: -10px 0 10px; }
+  .connector .line { width: 2px; height: 30px; background: #cbd5e0; margin: 0 auto; }
+
+  /* Section */
+  .section { margin-bottom: 36px; }
+  .section-header { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; padding-bottom: 8px; border-bottom: 2px solid #e2e8f0; }
+  .section-dot { width: 14px; height: 14px; border-radius: 50%; }
+  .section-title { font-size: 18px; font-weight: 700; }
+  .section-meta { font-size: 13px; color: var(--gray); margin-left: auto; }
+  .section-desc { font-size: 13px; color: #4a5568; margin-bottom: 14px; line-height: 1.5; padding: 12px 16px; background: #edf2f7; border-radius: 8px; }
+  .section-desc strong { color: var(--dark); }
+  .flow-steps { display: flex; gap: 8px; flex-wrap: wrap; margin-top: 8px; }
+  .flow-step { font-size: 11px; background: white; padding: 4px 10px; border-radius: 20px; color: #4a5568; border: 1px solid #e2e8f0; }
+  .flow-step::before { content: attr(data-num) ". "; font-weight: 700; color: var(--navy); }
+
+  .section-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(220px, 1fr)); gap: 12px; }
+  .member-card { background: white; border-radius: 10px; padding: 16px; box-shadow: 0 2px 8px rgba(0,0,0,0.05); border-left: 4px solid transparent; transition: transform 0.15s, box-shadow 0.15s; cursor: pointer; }
+  .member-card:hover { transform: translateY(-2px); box-shadow: 0 4px 16px rgba(0,0,0,0.1); }
+  .member-card .name { font-size: 15px; font-weight: 600; }
+  .member-card .role { font-size: 12px; color: var(--gray); margin-top: 2px; }
+  .member-card .reports-to { font-size: 11px; color: #a0aec0; margin-top: 6px; }
+  .member-card .click-hint { font-size: 10px; color: #cbd5e0; margin-top: 6px; }
+  .status { display: inline-block; font-size: 10px; padding: 2px 6px; border-radius: 10px; margin-top: 6px; font-weight: 600; }
+  .status-ativo { background: #c6f6d5; color: #22543d; }
+  .status-vaga { background: #fed7d7; color: #9b2c2c; }
+  .status-lider { background: #e9d8fd; color: #44337a; }
+
+  .comercial .section-dot, .comercial .member-card { border-left-color: var(--blue); } .comercial .section-dot { background: var(--blue); }
+  .marketing .section-dot, .marketing .member-card { border-left-color: var(--purple); } .marketing .section-dot { background: var(--purple); }
+  .recepcao .section-dot, .recepcao .member-card { border-left-color: var(--gold); } .recepcao .section-dot { background: var(--gold); }
+  .clinico .section-dot, .clinico .member-card { border-left-color: var(--green); } .clinico .section-dot { background: var(--green); }
+  .laboratorio .section-dot, .laboratorio .member-card { border-left-color: var(--red); } .laboratorio .section-dot { background: var(--red); }
+  .admfin .section-dot, .admfin .member-card { border-left-color: var(--gray); } .admfin .section-dot { background: var(--gray); }
+  .operacional .section-dot, .operacional .member-card { border-left-color: var(--dark); } .operacional .section-dot { background: var(--dark); }
+
+  /* Vagas */
+  .vagas-panel { background: white; border-radius: var(--radius); padding: 24px; box-shadow: var(--shadow); margin-top: 40px; border-top: 4px solid var(--red); }
+  .vagas-panel h3 { font-size: 16px; margin-bottom: 12px; color: var(--red); }
+  .vagas-list { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 10px; }
+  .vaga-item { display: flex; align-items: center; gap: 10px; padding: 10px 14px; background: #fff5f5; border-radius: 8px; font-size: 13px; }
+  .vaga-item .vaga-dot { width: 8px; height: 8px; border-radius: 50%; background: var(--red); flex-shrink: 0; }
+
+  footer { text-align: center; padding: 30px; font-size: 12px; color: #a0aec0; }
+
+  /* MODAL */
+  .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.5); z-index: 100; justify-content: center; align-items: center; backdrop-filter: blur(4px); }
+  .modal-overlay.active { display: flex; }
+  .modal { background: white; border-radius: 16px; max-width: 560px; width: 90%; max-height: 85vh; overflow-y: auto; box-shadow: 0 20px 60px rgba(0,0,0,0.2); animation: modalIn 0.25s ease; }
+  @keyframes modalIn { from { opacity: 0; transform: scale(0.95) translateY(10px); } to { opacity: 1; transform: scale(1) translateY(0); } }
+  .modal-header { padding: 24px 24px 0; display: flex; justify-content: space-between; align-items: flex-start; }
+  .modal-header .mh-info .mh-name { font-size: 22px; font-weight: 700; color: var(--dark); }
+  .modal-header .mh-info .mh-role { font-size: 14px; color: var(--gray); margin-top: 2px; }
+  .modal-header .mh-info .mh-sector { font-size: 12px; color: white; display: inline-block; padding: 3px 10px; border-radius: 20px; margin-top: 8px; }
+  .modal-close { background: none; border: none; font-size: 28px; cursor: pointer; color: #a0aec0; padding: 0 4px; line-height: 1; }
+  .modal-close:hover { color: var(--dark); }
+  .modal-body { padding: 20px 24px 24px; }
+  .modal-section { margin-bottom: 20px; }
+  .modal-section h4 { font-size: 12px; text-transform: uppercase; letter-spacing: 1px; color: var(--gray); margin-bottom: 8px; font-weight: 600; }
+  .modal-section p { font-size: 14px; line-height: 1.6; color: #4a5568; }
+  .modal-section ul { list-style: none; padding: 0; }
+  .modal-section ul li { font-size: 13px; color: #4a5568; padding: 4px 0; padding-left: 16px; position: relative; }
+  .modal-section ul li::before { content: ""; position: absolute; left: 0; top: 11px; width: 6px; height: 6px; border-radius: 50%; }
+
+  .kpi-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(140px, 1fr)); gap: 10px; }
+  .kpi-item { background: var(--light); border-radius: 10px; padding: 12px; text-align: center; }
+  .kpi-item .kpi-label { font-size: 11px; color: var(--gray); text-transform: uppercase; letter-spacing: 0.5px; }
+  .kpi-item .kpi-value { font-size: 18px; font-weight: 700; color: var(--navy); margin-top: 4px; }
+
+  .report-line { display: flex; align-items: center; gap: 8px; font-size: 13px; color: #4a5568; }
+  .report-arrow { color: #a0aec0; }
+
+  @media (max-width: 768px) {
+    .stats-bar { gap: 20px; }
+    .diretoria { gap: 10px; }
+    .card { min-width: 140px; padding: 14px 16px; }
+    .section-grid { grid-template-columns: 1fr; }
+    header h1 { font-size: 22px; }
+    .modal { width: 95%; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <h1>Allegra Odontologia</h1>
+  <p>Organograma Organizacional — Abril 2026</p>
+</header>
+
+<div class="stats-bar">
+  <div class="stat"><div class="stat-value">22</div><div class="stat-label">Pessoas</div></div>
+  <div class="stat"><div class="stat-value">8</div><div class="stat-label">Setores</div></div>
+  <div class="stat"><div class="stat-value">4</div><div class="stat-label">Socios</div></div>
+  <div class="stat"><div class="stat-value">3</div><div class="stat-label">Vagas Abertas</div></div>
+  <div class="stat"><div class="stat-value">3</div><div class="stat-label">Unidades</div></div>
+</div>
+
+<div class="org-container">
+
+  <!-- DIRETORIA -->
+  <div class="diretoria">
+    <div class="card ceo" onclick="openModal('rodolfo')">
+      <div class="name">Dr. Rodolfo Segawa</div>
+      <div class="role">CEO + Avaliador Clinico</div>
+      <div class="badge">CEO</div>
+      <div class="click-hint">Clique para ver detalhes</div>
+    </div>
+    <div class="card coo" onclick="openModal('juan')">
+      <div class="name">Juan Lourenco</div>
+      <div class="role">COO — Operacoes & Gestao</div>
+      <div class="badge">COO</div>
+      <div class="click-hint">Clique para ver detalhes</div>
+    </div>
+    <div class="card socia-closer" onclick="openModal('sarah')">
+      <div class="name">Sarah</div>
+      <div class="role">Socia + Closer</div>
+      <div class="badge">Socia</div>
+      <div class="click-hint">Clique para ver detalhes</div>
+    </div>
+    <div class="card socia-rh" onclick="openModal('debora')">
+      <div class="name">Debora</div>
+      <div class="role">Socia + Coord. RH</div>
+      <div class="badge">Socia</div>
+      <div class="click-hint">Clique para ver detalhes</div>
+    </div>
+  </div>
+
+  <div class="connector"><div class="line"></div></div>
+
+  <!-- COMERCIAL -->
+  <div class="section comercial">
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <div class="section-title">Comercial</div>
+      <div class="section-meta">5 ativos | Lider: Marta &rarr; Juan (COO)</div>
+    </div>
+    <div class="section-desc">
+      <strong>Objetivo:</strong> Gerar leads qualificados, nutrir pipeline e fechar tratamentos.
+      <div class="flow-steps">
+        <span class="flow-step" data-num="1">Marketing gera leads</span>
+        <span class="flow-step" data-num="2">SDRs qualificam e agendam</span>
+        <span class="flow-step" data-num="3">Laura nutre via redes</span>
+        <span class="flow-step" data-num="4">Sarah fecha na avaliacao</span>
+        <span class="flow-step" data-num="5">Marta coordena pipeline</span>
+      </div>
+    </div>
+    <div class="section-grid">
+      <div class="member-card" onclick="openModal('marta')"><div class="name">Marta</div><div class="role">Coordenadora Comercial</div><div class="reports-to">Reporta a: Juan (COO)</div><span class="status status-lider">Lider</span><div class="click-hint">Clique para ver KPIs</div></div>
+      <div class="member-card" onclick="openModal('renata')"><div class="name">Renata</div><div class="role">SDR 1</div><div class="reports-to">Reporta a: Marta</div><span class="status status-ativo">Ativo</span><div class="click-hint">Clique para ver KPIs</div></div>
+      <div class="member-card" onclick="openModal('jaine')"><div class="name">Jaine</div><div class="role">SDR 2</div><div class="reports-to">Reporta a: Marta</div><span class="status status-ativo">Ativo</span><div class="click-hint">Clique para ver KPIs</div></div>
+      <div class="member-card" onclick="openModal('laura')"><div class="name">Laura</div><div class="role">Social Selling</div><div class="reports-to">Reporta a: Marta</div><span class="status status-ativo">Ativo</span><div class="click-hint">Clique para ver KPIs</div></div>
+    </div>
+  </div>
+
+  <!-- MARKETING -->
+  <div class="section marketing">
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <div class="section-title">Marketing</div>
+      <div class="section-meta">3 ativos | Lider: Jessica &rarr; Juan (COO)</div>
+    </div>
+    <div class="section-desc">
+      <strong>Objetivo:</strong> Gerar demanda qualificada e fortalecer a marca Allegra.
+      <div class="flow-steps">
+        <span class="flow-step" data-num="1">Jessica define estrategia</span>
+        <span class="flow-step" data-num="2">Matheus executa campanhas</span>
+        <span class="flow-step" data-num="3">Rafael produz conteudo social</span>
+        <span class="flow-step" data-num="4">Conteudo Dr. Rodolfo autoridade</span>
+        <span class="flow-step" data-num="5">Leads distribuidos para SDRs</span>
+      </div>
+    </div>
+    <div class="section-grid">
+      <div class="member-card" onclick="openModal('jessica')"><div class="name">Jessica</div><div class="role">Coord. Marketing</div><div class="reports-to">Reporta a: Juan (COO)</div><span class="status status-lider">Lider</span><div class="click-hint">Clique para ver KPIs</div></div>
+      <div class="member-card" onclick="openModal('matheus')"><div class="name">Matheus</div><div class="role">Gestor de Trafego</div><div class="reports-to">Reporta a: Jessica</div><span class="status status-ativo">Ativo</span><div class="click-hint">Clique para ver KPIs</div></div>
+      <div class="member-card" onclick="openModal('rafael')"><div class="name">Rafael</div><div class="role">Social Media</div><div class="reports-to">Reporta a: Jessica</div><span class="status status-ativo">Ativo</span><div class="click-hint">Clique para ver KPIs</div></div>
+    </div>
+  </div>
+
+  <!-- RECEPCAO -->
+  <div class="section recepcao">
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <div class="section-title">Recepcao</div>
+      <div class="section-meta">2 ativos + 1 vaga | Lider: Sarah &rarr; Dr. Rodolfo</div>
+    </div>
+    <div class="section-desc">
+      <strong>Objetivo:</strong> Experiencia do paciente do agendamento ao pos-consulta.
+      <div class="flow-steps">
+        <span class="flow-step" data-num="1">Check-in paciente</span>
+        <span class="flow-step" data-num="2">Confirmacao procedimento</span>
+        <span class="flow-step" data-num="3">Encaminhamento sala clinica</span>
+        <span class="flow-step" data-num="4">Reagendamento + NPS</span>
+      </div>
+    </div>
+    <div class="section-grid">
+      <div class="member-card" onclick="openModal('leticia')"><div class="name">Leticia</div><div class="role">Recepcionista #1</div><div class="reports-to">Reporta a: Sarah</div><span class="status status-ativo">Ativo</span><div class="click-hint">Clique para ver KPIs</div></div>
+      <div class="member-card" onclick="openModal('tamara')"><div class="name">Tamara</div><div class="role">Recepcionista #2</div><div class="reports-to">Reporta a: Sarah</div><span class="status status-ativo">Ativo</span><div class="click-hint">Clique para ver KPIs</div></div>
+      <div class="member-card"><div class="name">Concierge</div><div class="role">Concierge Premium</div><div class="reports-to">Reportara a: Sarah</div><span class="status status-vaga">Vaga</span></div>
+    </div>
+  </div>
+
+  <!-- CLINICO -->
+  <div class="section clinico">
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <div class="section-title">Clinico</div>
+      <div class="section-meta">4 ativos | Lider: Alexsandra &rarr; Juan (COO)</div>
+    </div>
+    <div class="section-desc">
+      <strong>Objetivo:</strong> Execucao de procedimentos com excelencia tecnica e seguranca.
+      <div class="flow-steps">
+        <span class="flow-step" data-num="1">Alexsandra prepara sala</span>
+        <span class="flow-step" data-num="2">ASBs auxiliam dentistas</span>
+        <span class="flow-step" data-num="3">Protocolo esterilizacao ANVISA</span>
+        <span class="flow-step" data-num="4">Rodolfo supervisiona qualidade</span>
+      </div>
+    </div>
+    <div class="section-grid">
+      <div class="member-card" onclick="openModal('alexsandra')"><div class="name">Alexsandra</div><div class="role">TSB Lider</div><div class="reports-to">Reporta a: Juan (COO)</div><span class="status status-lider">Lider</span><div class="click-hint">Clique para ver KPIs</div></div>
+      <div class="member-card" onclick="openModal('janaina')"><div class="name">Janaina</div><div class="role">ASB</div><div class="reports-to">Reporta a: Alexsandra</div><span class="status status-ativo">Ativo</span><div class="click-hint">Clique para ver KPIs</div></div>
+      <div class="member-card" onclick="openModal('julia')"><div class="name">Julia</div><div class="role">ASB</div><div class="reports-to">Reporta a: Alexsandra</div><span class="status status-ativo">Ativo</span><div class="click-hint">Clique para ver KPIs</div></div>
+    </div>
+  </div>
+
+  <!-- LABORATORIO -->
+  <div class="section laboratorio">
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <div class="section-title">Laboratorio</div>
+      <div class="section-meta">1 ativo + 2 vagas | Reporta a: Dr. Rodolfo</div>
+    </div>
+    <div class="section-desc">
+      <strong>Objetivo:</strong> Producao interna de proteses e pecas com CAD/CAM. Setor em montagem — prioridade de contratacao para reduzir dependencia de labs externos e melhorar margem.
+    </div>
+    <div class="section-grid">
+      <div class="member-card" onclick="openModal('pedro')"><div class="name">Pedro</div><div class="role">Assistente de Protese</div><div class="reports-to">Reporta a: Dr. Rodolfo</div><span class="status status-ativo">Ativo</span><div class="click-hint">Clique para ver KPIs</div></div>
+      <div class="member-card"><div class="name">Lider Lab CAD/CAM</div><div class="role">Gestao do lab, producao digital</div><div class="reports-to">Reportara a: Dr. Rodolfo</div><span class="status status-vaga">A contratar</span></div>
+      <div class="member-card"><div class="name">Protesista</div><div class="role">Producao de proteses</div><div class="reports-to">Reportara a: Lider Lab</div><span class="status status-vaga">A contratar</span></div>
+    </div>
+  </div>
+
+  <!-- ADMIN / FINANCEIRO -->
+  <div class="section admfin">
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <div class="section-title">Admin / Financeiro</div>
+      <div class="section-meta">2 ativos | Lider: Debora &rarr; Dr. Rodolfo</div>
+    </div>
+    <div class="section-desc">
+      <strong>Objetivo:</strong> Backoffice, folha de pagamento, contas, compliance e gestao de pessoas.
+      <div class="flow-steps">
+        <span class="flow-step" data-num="1">Natali alimenta Omie (contas a pagar/receber)</span>
+        <span class="flow-step" data-num="2">Juan gerencia fluxo de caixa e relatorios</span>
+        <span class="flow-step" data-num="3">Debora cuida de RH</span>
+      </div>
+    </div>
+    <div class="section-grid">
+      <div class="member-card" onclick="openModal('juan_fin')"><div class="name">Juan Lourenco</div><div class="role">COO — Fluxo de Caixa & Relatorios</div><div class="reports-to">Diretoria (Socio)</div><span class="status status-lider">Gestao Financeira</span><div class="click-hint">Clique para ver KPIs</div></div>
+      <div class="member-card" onclick="openModal('debora')"><div class="name">Debora</div><div class="role">Socia + Coord. RH</div><div class="reports-to">Reporta a: Dr. Rodolfo</div><span class="status status-lider">Lider RH</span><div class="click-hint">Clique para ver KPIs</div></div>
+      <div class="member-card" onclick="openModal('natali')"><div class="name">Natali</div><div class="role">Assist. Admin + Financeiro</div><div class="reports-to">Reporta a: Debora / Juan</div><span class="status status-ativo">Ativo</span><div class="click-hint">Clique para ver KPIs</div></div>
+    </div>
+  </div>
+
+  <!-- OPERACIONAL -->
+  <div class="section operacional">
+    <div class="section-header">
+      <div class="section-dot"></div>
+      <div class="section-title">Operacional</div>
+      <div class="section-meta">1 ativo | Reporta a: Juan (COO)</div>
+    </div>
+    <div class="section-desc">
+      <strong>Objetivo:</strong> Manutencao, limpeza e infraestrutura das unidades.
+    </div>
+    <div class="section-grid">
+      <div class="member-card" onclick="openModal('valdirene')"><div class="name">Valdirene</div><div class="role">Limpeza / Sala VIP</div><div class="reports-to">Reporta a: Juan (COO)</div><span class="status status-ativo">Ativo</span><div class="click-hint">Clique para ver KPIs</div></div>
+    </div>
+  </div>
+
+  <!-- VAGAS -->
+  <div class="vagas-panel">
+    <h3>Vagas Abertas</h3>
+    <div class="vagas-list">
+      <div class="vaga-item"><div class="vaga-dot"></div><span><strong>Lider Lab CAD/CAM</strong> — Laboratorio</span></div>
+      <div class="vaga-item"><div class="vaga-dot"></div><span><strong>Protesista</strong> — Laboratorio</span></div>
+      <div class="vaga-item"><div class="vaga-dot"></div><span><strong>Concierge</strong> — Recepcao</span></div>
+    </div>
+  </div>
+</div>
+
+<footer>Documento Confidencial — Allegra Odontologia | Atualizado: Abril 2026 | 3 Unidades: Tatuape, Analia Franco, Mooca</footer>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay" onclick="closeModal(event)">
+  <div class="modal" id="modalContent">
+    <div class="modal-header">
+      <div class="mh-info">
+        <div class="mh-name" id="modalName"></div>
+        <div class="mh-role" id="modalRole"></div>
+        <div class="mh-sector" id="modalSector"></div>
+      </div>
+      <button class="modal-close" onclick="closeModal()">&times;</button>
+    </div>
+    <div class="modal-body" id="modalBody"></div>
+  </div>
+</div>
+
+<script>
+const people = {
+  rodolfo: {
+    name: "Dr. Rodolfo Segawa", role: "CEO + Avaliador Clinico", sector: "Diretoria", sectorColor: "#1a365d",
+    reporta: "Diretoria (socio fundador)",
+    descricao: "Responsavel pela visao estrategica da Allegra, define o posicionamento clinico e de mercado. Realiza avaliacoes clinicas dos pacientes, tomando decisoes sobre planos de tratamento complexos. E a principal autoridade tecnica da clinica e referencia de conteudo para marketing.",
+    responsabilidades: ["Definir estrategia e visao da empresa", "Realizar avaliacoes clinicas de pacientes", "Supervisionar qualidade tecnica dos procedimentos", "Aprovar planos de tratamento complexos", "Ser autoridade de conteudo para marketing", "Decisoes de investimento e expansao"],
+    kpis: [{label: "Avaliacoes/semana", value: "~25"}, {label: "Taxa fechamento", value: "~65%"}, {label: "Ticket medio", value: "R$8-15k"}, {label: "NPS clinico", value: "9.2"}]
+  },
+  juan: {
+    name: "Juan Lourenco", role: "COO — Operacoes & Gestao", sector: "Diretoria", sectorColor: "#3182ce",
+    reporta: "Diretoria (socio)",
+    descricao: "Responsavel por toda a operacao da Allegra no dia-a-dia. Gerencia diretamente o fluxo de caixa, relatorios financeiros e controle de custos. Supervisiona processos operacionais, tecnologia e equipes. Lidera a agenda de break-even e eficiencia operacional das 3 unidades.",
+    responsabilidades: ["Gerenciar fluxo de caixa e relatorios financeiros", "Controle de custos e analise de margem", "Otimizacao de processos operacionais", "Implementacao de tecnologia e automacoes", "Supervisao de equipes (comercial, marketing, clinico, operacional)", "Analise de KPIs e dashboards", "Negociacoes com fornecedores"],
+    kpis: [{label: "Margem operacional", value: "Meta 15%"}, {label: "Fluxo de caixa", value: "Gerencia direto"}, {label: "Break-even", value: "Prioridade"}, {label: "Equipes diretas", value: "5 setores"}]
+  },
+  sarah: {
+    name: "Sarah", role: "Socia + Closer", sector: "Comercial / Recepcao", sectorColor: "#d69e2e",
+    reporta: "Dr. Rodolfo (CEO)",
+    descricao: "Atua na ponta do funil comercial, realizando o fechamento de tratamentos de alto valor durante as avaliacoes. Tambem supervisiona a recepcao, garantindo a experiencia do paciente desde a chegada. Ponte entre o comercial e o atendimento presencial.",
+    responsabilidades: ["Fechar tratamentos de alto ticket nas avaliacoes", "Supervisionar equipe de recepcao", "Garantir experiencia premium do paciente", "Acompanhar pipeline de fechamento", "Treinar equipe em atendimento humanizado"],
+    kpis: [{label: "Taxa fechamento", value: "Meta 70%"}, {label: "Ticket medio", value: "R$8-15k"}, {label: "Pacientes VIP", value: "Ativos"}, {label: "NPS recepcao", value: "Meta 9+"}]
+  },
+  debora: {
+    name: "Debora", role: "Socia + Coord. RH", sector: "Admin / Financeiro", sectorColor: "#718096",
+    reporta: "Dr. Rodolfo (CEO)",
+    descricao: "Responsavel por toda a gestao de recursos humanos da Allegra. Cuida de contratacoes, desligamentos, folha de pagamento, ferias, compliance trabalhista e cultura organizacional. Tambem supervisiona o backoffice financeiro junto com Natali.",
+    responsabilidades: ["Gestao completa de RH", "Folha de pagamento e beneficios", "Contratacoes e desligamentos", "Compliance trabalhista e LGPD", "Treinamento e desenvolvimento", "Supervisao do backoffice financeiro"],
+    kpis: [{label: "Turnover", value: "Meta <15%"}, {label: "Compliance", value: "100%"}, {label: "Contratacoes/tri", value: "Conforme plano"}, {label: "Satisfacao equipe", value: "Meta 8+"}]
+  },
+  marta: {
+    name: "Marta", role: "Coordenadora Comercial", sector: "Comercial", sectorColor: "#2b6cb0",
+    reporta: "Juan (COO)",
+    descricao: "Lidera o time comercial no dia-a-dia. Define metas, acompanha pipeline no Kommo, treina SDRs e garante o ritmo de prospeccao e agendamentos. E a ponte entre marketing (leads) e o fechamento (Sarah).",
+    responsabilidades: ["Gestao diaria do time de SDRs", "Acompanhar pipeline no Kommo CRM", "Definir e cobrar metas semanais/mensais", "Treinar equipe em tecnicas de prospeccao", "Reportar resultados ao COO", "Coordenar distribuicao de leads"],
+    kpis: [{label: "Leads qualificados/mes", value: "Meta 200+"}, {label: "Taxa agendamento", value: "Meta 40%"}, {label: "Agendamentos/semana", value: "Meta 30+"}, {label: "Pipeline ativo", value: "R$ total"}]
+  },
+  renata: {
+    name: "Renata", role: "SDR 1", sector: "Comercial", sectorColor: "#2b6cb0",
+    reporta: "Marta (Coord. Comercial)",
+    descricao: "Responsavel pela prospeccao ativa de novos pacientes. Faz o primeiro contato com leads gerados pelo marketing, qualifica interesse e necessidade, e agenda avaliacoes na clinica.",
+    responsabilidades: ["Prospeccao ativa de leads (telefone, WhatsApp)", "Qualificacao de leads por perfil e interesse", "Agendamento de avaliacoes", "Registro de interacoes no Kommo CRM", "Follow-up com leads frios", "Atingir meta semanal de agendamentos"],
+    kpis: [{label: "Contatos/dia", value: "Meta 50+"}, {label: "Agendamentos/sem", value: "Meta 15"}, {label: "Taxa qualificacao", value: "Meta 35%"}, {label: "Follow-ups/dia", value: "Meta 20+"}]
+  },
+  jaine: {
+    name: "Jaine", role: "SDR 2", sector: "Comercial", sectorColor: "#2b6cb0",
+    reporta: "Marta (Coord. Comercial)",
+    descricao: "Responsavel pela prospeccao ativa de novos pacientes. Trabalha em paralelo com Renata para maximizar a cobertura de leads e agendamentos.",
+    responsabilidades: ["Prospeccao ativa de leads (telefone, WhatsApp)", "Qualificacao de leads por perfil e interesse", "Agendamento de avaliacoes", "Registro de interacoes no Kommo CRM", "Follow-up com leads frios", "Atingir meta semanal de agendamentos"],
+    kpis: [{label: "Contatos/dia", value: "Meta 50+"}, {label: "Agendamentos/sem", value: "Meta 15"}, {label: "Taxa qualificacao", value: "Meta 35%"}, {label: "Follow-ups/dia", value: "Meta 20+"}]
+  },
+  laura: {
+    name: "Laura", role: "Social Selling", sector: "Comercial", sectorColor: "#2b6cb0",
+    reporta: "Marta (Coord. Comercial)",
+    descricao: "Responsavel por nutrir relacionamentos com potenciais pacientes atraves das redes sociais. Engaja com seguidores, responde duvidas nos DMs, e converte interesse organico em agendamentos.",
+    responsabilidades: ["Engajamento ativo nas redes sociais da Allegra", "Responder DMs e comentarios com foco em conversao", "Identificar leads organicos e encaminhar para pipeline", "Nutrir relacionamento com leads em fase de decisao", "Apoiar conteudo com insights do publico"],
+    kpis: [{label: "Leads organicos/mes", value: "Meta 30+"}, {label: "DMs respondidos/dia", value: "Meta 40+"}, {label: "Conversao DM→agenda", value: "Meta 20%"}, {label: "Engajamento", value: "Taxa stories"}]
+  },
+  jessica: {
+    name: "Jessica", role: "Coord. Marketing", sector: "Marketing", sectorColor: "#6b46c1",
+    reporta: "Juan (COO)",
+    descricao: "Lidera a estrategia de marketing da Allegra. Define calendario editorial, posicionamento de marca, estrategia de conteudo e supervisiona equipe de trafego e social media. Responsavel por transformar a autoridade do Dr. Rodolfo em demanda qualificada.",
+    responsabilidades: ["Definir estrategia e calendario de conteudo", "Supervisionar equipe (trafego + social media)", "Gestao da marca Allegra nas redes", "Coordenar producao de conteudo com Dr. Rodolfo", "Analisar metricas de engajamento e alcance", "Planejar campanhas sazonais e lancamentos"],
+    kpis: [{label: "Leads/mes (total)", value: "Meta 300+"}, {label: "CPL medio", value: "Meta <R$40"}, {label: "Engajamento IG", value: "70k seguidores"}, {label: "Conteudos/semana", value: "Meta 5+"}]
+  },
+  matheus: {
+    name: "Matheus", role: "Gestor de Trafego", sector: "Marketing", sectorColor: "#6b46c1",
+    reporta: "Jessica (Coord. Marketing)",
+    descricao: "Responsavel por toda a operacao de midia paga da Allegra. Gerencia campanhas no Google Ads e Meta Ads, otimiza CPA e ROAS, e garante fluxo constante de leads qualificados para o time comercial.",
+    responsabilidades: ["Criar e otimizar campanhas Google Ads", "Gerenciar campanhas Meta Ads (Facebook/Instagram)", "Monitorar e reduzir CPA", "Testar criativos e copys de anuncios", "Gerar relatorios semanais de performance", "Segmentar publicos e testar audiencias"],
+    kpis: [{label: "CPA", value: "Atual R$69"}, {label: "ROAS", value: "Meta 5x+"}, {label: "Leads pagos/mes", value: "Meta 200+"}, {label: "Budget mensal", value: "Gerenciar"}]
+  },
+  rafael: {
+    name: "Rafael", role: "Social Media", sector: "Marketing", sectorColor: "#6b46c1",
+    reporta: "Jessica (Coord. Marketing)",
+    descricao: "Responsavel pela producao de conteudo e gestao das redes sociais da Allegra. Cria posts, stories, reels e conteudo visual que posiciona a marca e o Dr. Rodolfo como autoridade em odontologia estetica.",
+    responsabilidades: ["Producao de conteudo para Instagram e redes", "Criacao de posts, stories e reels", "Gestao do calendario de publicacoes", "Edicao de fotos e videos", "Monitoramento de comentarios e engajamento", "Apoiar estrategia de conteudo com Jessica"],
+    kpis: [{label: "Posts/semana", value: "Meta 5+"}, {label: "Reels/semana", value: "Meta 3+"}, {label: "Engajamento medio", value: "Meta 3%+"}, {label: "Crescimento mensal", value: "Meta 2%+"}]
+  },
+  leticia: {
+    name: "Leticia", role: "Recepcionista #1", sector: "Recepcao", sectorColor: "#d69e2e",
+    reporta: "Sarah (Socia)",
+    descricao: "Responsavel pelo atendimento presencial dos pacientes na clinica. Cuida do check-in, confirmacao de agenda, documentacao e encaminhamento para as salas clinicas. E o primeiro ponto de contato presencial do paciente.",
+    responsabilidades: ["Recepcionar pacientes com cordialidade", "Confirmar agenda e procedimentos do dia", "Realizar check-in e documentacao", "Encaminhar pacientes para salas clinicas", "Agendar retornos e novos procedimentos", "Cobrar e registrar pagamentos"],
+    kpis: [{label: "No-show rate", value: "Meta <10%"}, {label: "Tempo espera", value: "Meta <10min"}, {label: "Confirmacoes/dia", value: "100%"}, {label: "NPS atendimento", value: "Meta 9+"}]
+  },
+  tamara: {
+    name: "Tamara", role: "Recepcionista #2", sector: "Recepcao", sectorColor: "#d69e2e",
+    reporta: "Sarah (Socia)",
+    descricao: "Atua em conjunto com Leticia no atendimento da recepcao. Foco em confirmacoes por WhatsApp, suporte ao agendamento e atendimento telefonico. Garante cobertura completa do fluxo de recepcao.",
+    responsabilidades: ["Atendimento telefonico e WhatsApp", "Confirmacao de agenda via mensagem", "Apoio ao check-in presencial", "Organizacao da sala de espera", "Registro de pagamentos", "Reagendamento de pacientes"],
+    kpis: [{label: "Confirmacoes/dia", value: "100% agenda"}, {label: "Tempo resposta WA", value: "Meta <5min"}, {label: "Reagendamentos", value: "Monitorar"}, {label: "NPS atendimento", value: "Meta 9+"}]
+  },
+  alexsandra: {
+    name: "Alexsandra", role: "TSB Lider", sector: "Clinico", sectorColor: "#38a169",
+    reporta: "Juan (COO)",
+    descricao: "Lider da equipe de auxiliares clinicos (ASBs). Responsavel pela organizacao do fluxo clinico, preparacao de salas, controle de materiais e garantia dos protocolos de esterilizacao conforme ANVISA. E o elo entre a parte operacional clinica e a gestao.",
+    responsabilidades: ["Liderar e supervisionar equipe de ASBs", "Preparar salas e materiais para procedimentos", "Garantir protocolos de esterilizacao (ANVISA)", "Controlar estoque de materiais clinicos", "Fazer pedidos de reposicao", "Reportar ocorrencias ao COO"],
+    kpis: [{label: "Conformidade ANVISA", value: "100%"}, {label: "Materiais/desperdicio", value: "Meta <5%"}, {label: "Salas prontas no horario", value: "100%"}, {label: "Intercorrencias", value: "Zero"}]
+  },
+  janaina: {
+    name: "Janaina", role: "ASB (Auxiliar de Saude Bucal)", sector: "Clinico", sectorColor: "#38a169",
+    reporta: "Alexsandra (TSB Lider)",
+    descricao: "Auxiliar de saude bucal responsavel por dar suporte direto ao dentista durante os procedimentos clinicos. Prepara instrumental, aspira, manipula materiais e garante a biosseguranca.",
+    responsabilidades: ["Auxiliar dentista durante procedimentos", "Preparar e organizar instrumental", "Aspiracao e manipulacao de materiais", "Manter biosseguranca no consultorio", "Limpar e esterilizar instrumentos", "Registrar procedimentos realizados"],
+    kpis: [{label: "Procedimentos/dia", value: "Conforme agenda"}, {label: "Biosseguranca", value: "100%"}, {label: "Materiais preparados", value: "Zero atraso"}, {label: "Registros", value: "Completos"}]
+  },
+  julia: {
+    name: "Julia", role: "ASB (Auxiliar de Saude Bucal)", sector: "Clinico", sectorColor: "#38a169",
+    reporta: "Alexsandra (TSB Lider)",
+    descricao: "Auxiliar de saude bucal que trabalha em conjunto com Janaina para cobrir todas as salas clinicas. Mesmo escopo de funcoes, garantindo que nenhum procedimento fique sem apoio.",
+    responsabilidades: ["Auxiliar dentista durante procedimentos", "Preparar e organizar instrumental", "Aspiracao e manipulacao de materiais", "Manter biosseguranca no consultorio", "Limpar e esterilizar instrumentos", "Registrar procedimentos realizados"],
+    kpis: [{label: "Procedimentos/dia", value: "Conforme agenda"}, {label: "Biosseguranca", value: "100%"}, {label: "Materiais preparados", value: "Zero atraso"}, {label: "Registros", value: "Completos"}]
+  },
+  natali: {
+    name: "Natali", role: "Assist. Admin + Financeiro", sector: "Admin / Financeiro", sectorColor: "#718096",
+    reporta: "Debora / Juan",
+    descricao: "Responsavel pela alimentacao do sistema Omie com lancamentos de contas a pagar e receber, emissao de notas fiscais e suporte administrativo. A gestao financeira estrategica (fluxo de caixa, relatorios, analises) e feita pelo Juan (COO).",
+    responsabilidades: ["Alimentar sistema Omie (contas a pagar/receber)", "Incluir lancamentos financeiros no sistema", "Emissao de notas fiscais", "Suporte administrativo geral", "Apoiar Debora em tarefas de RH quando necessario", "Organizacao de documentos e arquivos"],
+    kpis: [{label: "Lancamentos Omie", value: "Em dia"}, {label: "NFs emitidas", value: "100% corretas"}, {label: "Atraso lancamentos", value: "Zero"}, {label: "Suporte admin", value: "Conforme demanda"}]
+  },
+  juan_fin: {
+    name: "Juan Lourenco", role: "COO — Gestao Financeira & Operacional", sector: "Admin / Financeiro", sectorColor: "#718096",
+    reporta: "Diretoria (Socio)",
+    descricao: "Alem de liderar toda a operacao como COO, Juan e responsavel direto pela gestao financeira da Allegra. Gerencia fluxo de caixa, elabora relatorios financeiros, controla custos e toma decisoes baseadas em dados. Natali alimenta o Omie; Juan analisa, decide e age.",
+    responsabilidades: ["Gerenciar fluxo de caixa das 3 unidades", "Elaborar e analisar relatorios financeiros (DRE, balanco)", "Controlar custos fixos e variaveis", "Definir estrategia de precificacao", "Negociar com fornecedores e parceiros", "Supervisionar Natali nos lancamentos do Omie", "Aprovar pagamentos e investimentos", "Monitorar inadimplencia e cobrancas", "Acompanhar break-even e margem operacional", "Gestao de contratos e renegociacoes"],
+    kpis: [{label: "Fluxo de caixa", value: "Gerencia direto"}, {label: "Break-even", value: "Prioridade #1"}, {label: "Margem operacional", value: "Meta 15%"}, {label: "Custo fixo mensal", value: "Monitorar"}]
+  },
+  pedro: {
+    name: "Pedro", role: "Assistente de Protese", sector: "Laboratorio", sectorColor: "#e53e3e",
+    reporta: "Dr. Rodolfo (CEO)",
+    descricao: "Assistente de protese responsavel por apoiar a producao de pecas proteticas. Auxilia nos processos de laboratorio, preparacao de materiais e acabamento de proteses dentarias.",
+    responsabilidades: ["Apoiar producao de proteses dentarias", "Preparar materiais para confeccao de pecas", "Auxiliar no acabamento e polimento", "Organizar laboratorio e insumos", "Controlar estoque de materiais de lab", "Apoiar processos de CAD/CAM quando implementado"],
+    kpis: [{label: "Pecas produzidas/sem", value: "Conforme demanda"}, {label: "Qualidade", value: "Zero retrabalho"}, {label: "Estoque lab", value: "Sem falta"}, {label: "Prazo entrega", value: "Dentro do SLA"}]
+  },
+  valdirene: {
+    name: "Valdirene", role: "Limpeza / Sala VIP", sector: "Operacional", sectorColor: "#2d3748",
+    reporta: "Juan (COO)",
+    descricao: "Responsavel pela higienizacao e organizacao das unidades da Allegra. Cuida da limpeza geral, organizacao da sala VIP para pacientes especiais e manutencao do ambiente acolhedor da clinica.",
+    responsabilidades: ["Higienizacao completa das unidades", "Organizacao da sala VIP", "Reposicao de materiais de limpeza", "Manutencao da apresentacao visual da clinica", "Apoio operacional geral"],
+    kpis: [{label: "Limpeza no horario", value: "100%"}, {label: "Sala VIP pronta", value: "Antes paciente"}, {label: "Insumos", value: "Sem falta"}, {label: "Apresentacao", value: "Impecavel"}]
+  }
+};
+
+function openModal(id) {
+  const p = people[id];
+  if (!p) return;
+  document.getElementById('modalName').textContent = p.name;
+  document.getElementById('modalRole').textContent = p.role;
+  const sector = document.getElementById('modalSector');
+  sector.textContent = p.sector;
+  sector.style.background = p.sectorColor;
+
+  let html = '';
+
+  // Reporta a
+  html += `<div class="modal-section"><h4>Reporta a</h4><div class="report-line"><span>${p.reporta}</span></div></div>`;
+
+  // Descricao
+  html += `<div class="modal-section"><h4>Descricao da Funcao</h4><p>${p.descricao}</p></div>`;
+
+  // Responsabilidades
+  html += `<div class="modal-section"><h4>Responsabilidades</h4><ul>`;
+  p.responsabilidades.forEach(r => {
+    html += `<li style="--dot-color: ${p.sectorColor}"><span style="position:absolute;left:0;top:11px;width:6px;height:6px;border-radius:50%;background:${p.sectorColor}"></span>${r}</li>`;
+  });
+  html += `</ul></div>`;
+
+  // KPIs
+  html += `<div class="modal-section"><h4>KPIs Principais</h4><div class="kpi-grid">`;
+  p.kpis.forEach(k => {
+    html += `<div class="kpi-item"><div class="kpi-label">${k.label}</div><div class="kpi-value">${k.value}</div></div>`;
+  });
+  html += `</div></div>`;
+
+  document.getElementById('modalBody').innerHTML = html;
+  document.getElementById('modalOverlay').classList.add('active');
+}
+
+function closeModal(e) {
+  if (e && e.target !== e.currentTarget) return;
+  document.getElementById('modalOverlay').classList.remove('active');
+}
+
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+</script>
+</body>
+</html>
